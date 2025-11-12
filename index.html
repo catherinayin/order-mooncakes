@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Julia Moon Cake — Order</title>
+<style>
+  /* ===== Brand Tokens ===== */
+  :root{
+    --ink:#111;
+    --lavender:#e3d1ee;           /* header band + dividers */
+    --mustard:#efb549;            /* buttons/chips */
+    --paper:#fffaf5;              /* subtle warm bg */
+    --stroke:2px;
+    --radius:20px;
+    --container:1200px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font:16px/1.5 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color:var(--ink);
+    background:#fff;
+  }
+
+  /* ===== Top Bar ===== */
+  .topband{
+    background:var(--lavender);
+  }
+  .nav{
+    max-width:var(--container);
+    margin:0 auto;
+    padding:14px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .nav a{
+    color:var(--ink);
+    text-decoration:none;
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  .nav-left, .nav-right{display:flex; gap:24px}
+  .logo{
+    width:56px; height:56px;
+    background:var(--mustard);
+    border:var(--stroke) solid var(--ink);
+    border-radius:50%;
+    display:inline-grid;
+    place-items:center;
+    font-weight:900;
+  }
+
+  /* ===== Page Frame ===== */
+  .container{
+    max-width:var(--container);
+    margin:0 auto;
+    padding:32px 24px 80px;
+  }
+  .section-title{
+    text-align:center;
+    font-weight:800;
+    letter-spacing:.02em;
+    margin:16px 0 10px;
+    font-size:28px;
+  }
+  .kicker{
+    text-align:center;
+    margin:0 auto 28px;
+    max-width:760px;
+    color:#333;
+  }
+  .divider{
+    height:14px;
+    background:linear-gradient(to right, transparent 0, transparent 8%, var(--lavender) 8%, var(--lavender) 92%, transparent 92%, transparent 100%);
+    border-top:var(--stroke) solid var(--ink);
+    border-bottom:var(--stroke) solid var(--ink);
+    margin:28px 0 24px;
+  }
+
+  /* ===== Order Layout ===== */
+  .order-grid{
+    display:grid;
+    grid-template-columns: 1fr 380px;
+    gap:28px;
+  }
+  @media (max-width: 980px){
+    .order-grid{grid-template-columns:1fr}
+    .summary{position:static}
+  }
+
+  /* ===== Card / Form Styling ===== */
+  .card{
+    background:white;
+    border:var(--stroke) solid var(--ink);
+    border-radius:var(--radius);
+    padding:18px;
+  }
+  fieldset{
+    border:none; padding:0; margin:0 0 18px;
+  }
+  legend{
+    font-weight:800; margin-bottom:8px; letter-spacing:.02em;
+  }
+  label{display:block; margin:10px 0}
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="date"],
+  input[type="time"],
+  textarea,
+  select{
+    width:100%;
+    border:var(--stroke) solid var(--ink);
+    border-radius:16px;
+    padding:12px 14px;
+    background:#fff;
+    font:inherit;
+  }
+  textarea{min-height:110px; resize:vertical}
+
+  .row{display:grid; gap:12px; grid-template-columns:1fr 1fr}
+  @media (max-width:680px){ .row{grid-template-columns:1fr} }
+
+  .chip{
+    display:inline-block; padding:6px 10px; border-radius:999px;
+    border:var(--stroke) solid var(--ink); background:#fff;
+    margin:6px 8px 0 0; font-weight:600; cursor:pointer;
+  }
+  .chip input{display:none}
+  .chip.active{background:var(--mustard)}
+
+  /* ===== Summary ===== */
+  .summary{
+    position:sticky; top:18px;
+  }
+  .summary .line{
+    display:flex; justify-content:space-between; margin:8px 0;
+  }
+  .summary .total{font-weight:900; font-size:20px}
+  .muted{opacity:.75; font-size:.95rem}
+
+  /* ===== CTA ===== */
+  .btn{
+    appearance:none; border:none; cursor:pointer;
+    padding:12px 18px; border-radius:999px; font-weight:800;
+    background:var(--mustard); border:var(--stroke) solid var(--ink);
+  }
+  .btn:active{transform:translateY(1px)}
+  .policy{font-size:.9rem; margin-top:10px}
+</style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="topband">
+    <nav class="nav" aria-label="Main">
+      <div class="nav-left">
+        <a href="#">MENU</a>
+        <a href="#">ABOUT</a>
+      </div>
+      <div class="logo" aria-label="Julia Moon Cake logo">JM</div>
+      <div class="nav-right">
+        <a href="#">CONTACT</a>
+        <a href="#" style="text-decoration:underline">ORDER</a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Content -->
+  <main class="container">
+    <h1 class="section-title">ORDER MOONCAKES</h1>
+    <p class="kicker">Please order <strong>3–5 days in advance</strong>. Our kitchen handles allergens (wheat, eggs, nuts).</p>
+
+    <div class="divider" aria-hidden="true"></div>
+
+    <div class="order-grid">
+      <!-- Left: Form -->
+      <form class="card" id="orderForm" onsubmit="event.preventDefault(); alert('Thanks! We’ll confirm by email.');">
+        <!-- Box size -->
+        <fieldset>
+          <legend>Choose Your Box</legend>
+          <label>Box Size
+            <select name="box" id="box">
+              <option value="single">Single</option>
+              <option value="4">Box of 4</option>
+              <option value="8">Box of 8</option>
+            </select>
+          </label>
+        </fieldset>
+
+        <!-- Flavours -->
+        <fieldset>
+          <legend>Flavours</legend>
+          <div class="flavour-chips">
+            <!-- chips become active when clicked -->
+            <label class="chip"><input type="checkbox" name="flavour" value="Pandan">Pandan</label>
+            <label class="chip"><input type="checkbox" name="flavour" value="Red Bean">Red Bean</label>
+            <label class="chip"><input type="checkbox" name="flavour" value="White Lotus">White Lotus</label>
+            <label class="chip"><input type="checkbox" name="flavour" value="Single Yolk">Single Yolk</label>
+            <label class="chip"><input type="checkbox" name="flavour" value="Double Yolk">Double Yolk</label>
+            <label class="chip"><input type="checkbox" name="flavour" value="Mixed Nuts">Mixed Nuts</label>
+            <label class="chip"><input type="checkbox" name="flavour" value="Black Sesame">Black Sesame</label>
+          </div>
+          <label>Notes (gift message / special requests)
+            <textarea name="note" placeholder="Optional"></textarea>
+          </label>
+        </fieldset>
+
+        <!-- Method -->
+        <fieldset>
+          <legend>Pickup or Delivery</legend>
+          <label><input type="radio" name="method" value="pickup" checked> Pickup (Kitchener, ON)</label>
+          <label><input type="radio" name="method" value="delivery"> Local Delivery</label>
+
+          <div class="row pickup-fields">
+            <label>Pickup Date <input type="date" name="pickup-date"></label>
+            <label>Pickup Time <input type="time" name="pickup-time"></label>
+          </div>
+
+          <div class="delivery-fields" style="display:none">
+            <div class="row">
+              <label>Address <input type="text" name="address"></label>
+              <label>City <input type="text" name="city"></label>
+            </div>
+            <div class="row">
+              <label>Postal Code <input type="text" name="postal"></label>
+              <label>Delivery Date <input type="date" name="delivery-date"></label>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Contact -->
+        <fieldset>
+          <legend>Your Details</legend>
+          <div class="row">
+            <label>Name <input type="text" name="name" required></label>
+            <label>Email <input type="email" name="email" required></label>
+          </div>
+          <label>Phone <input type="tel" name="phone"></label>
+          <label><input type="checkbox" required> I acknowledge allergen risks.</label>
+        </fieldset>
+
+        <button class="btn" type="submit">Place Order</button>
+        <p class="policy muted">Free cancellation within 24h. We’ll email confirmation and pickup details.</p>
+      </form>
+
+      <!-- Right: Summary -->
+      <aside class="card summary" aria-label="Order summary">
+        <h3 style="margin:0 0 8px">Summary</h3>
+        <p class="muted">Itemized total updates as you select options.</p>
+        <div class="line"><span>Subtotal</span><span id="subtotal">$0.00</span></div>
+        <div class="line"><span>Delivery</span><span id="deliveryFee">$0.00</span></div>
+        <div class="line"><span>Tax</span><span id="tax">$0.00</span></div>
+        <hr>
+        <div class="line total"><span>Total</span><span id="total">$0.00</span></div>
+        <div style="margin-top:14px">
+          <span class="chip" aria-hidden="true">Secure checkout</span>
+          <span class="chip" aria-hidden="true">Small-batch</span>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+<script>
+  // simple “on-brand” interactivity without frameworks
+
+  // chip toggles
+  document.querySelectorAll('.chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      chip.classList.toggle('active');
+    });
+  });
+
+  // show/hide delivery vs pickup
+  const methodRadios = document.querySelectorAll('input[name="method"]');
+  const pickupFields = document.querySelector('.pickup-fields');
+  const deliveryFields = document.querySelector('.delivery-fields');
+  const deliveryFeeEl = document.getElementById('deliveryFee');
+
+  methodRadios.forEach(r=>{
+    r.addEventListener('change', ()=>{
+      const isDelivery = r.value === 'delivery' && r.checked;
+      deliveryFields.style.display = isDelivery ? 'block' : 'none';
+      pickupFields.style.display   = isDelivery ? 'none'  : 'grid';
+      deliveryFeeEl.textContent    = isDelivery ? '$5.00' : '$0.00';
+      recalc();
+    });
+  });
+
+  // very light “pricing” demo
+  const boxSelect = document.getElementById('box');
+  const subtotalEl = document.getElementById('subtotal');
+  const taxEl = document.getElementById('tax');
+  const totalEl = document.getElementById('total');
+
+  function priceForBox(v){
+    if(v==='single') return 8;
+    if(v==='4') return 28;
+    if(v==='8') return 52;
+    return 0;
+    }
+  function money(n){ return `$${n.toFixed(2)}`; }
+
+  function recalc(){
+    const sub = priceForBox(boxSelect.value);
+    const delivery = (document.querySelector('input[value="delivery"]').checked) ? 5 : 0;
+    const tax = +(sub + delivery)*0.13;
+    const total = sub + delivery + tax;
+
+    subtotalEl.textContent = money(sub);
+    taxEl.textContent = money(tax);
+    totalEl.textContent = money(total);
+  }
+
+  boxSelect.addEventListener('change', recalc);
+  recalc();
+</script>
+</body>
+</html>
+
